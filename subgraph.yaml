@@ -1,0 +1,44 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Contract
+    network: linea
+    source:
+      address: "0x896419Ed2E0dC848a1f7d2814F4e5Df4b9B9bFcc"
+      abi: Contract
+      startBlock: 2874747
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - NewReport
+        - NewStakeAmount
+        - NewStaker
+        - ReporterSlashed
+        - StakeWithdrawRequested
+        - StakeWithdrawn
+        - ValueRemoved
+      abis:
+        - name: Contract
+          file: ./abis/Contract.json
+      eventHandlers:
+        - event: NewReport(indexed bytes32,indexed uint256,bytes,uint256,bytes,indexed address)
+          handler: handleNewReport
+        - event: NewStakeAmount(uint256)
+          handler: handleNewStakeAmount
+        - event: NewStaker(indexed address,indexed uint256)
+          handler: handleNewStaker
+        - event: ReporterSlashed(indexed address,address,uint256)
+          handler: handleReporterSlashed
+        - event: StakeWithdrawRequested(address,uint256)
+          handler: handleStakeWithdrawRequested
+        - event: StakeWithdrawn(address)
+          handler: handleStakeWithdrawn
+        - event: ValueRemoved(bytes32,uint256)
+          handler: handleValueRemoved
+      file: ./src/contract.ts
